@@ -1,32 +1,18 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import requests
 
 
-cred = credentials.Certificate("serviceAccountKey.json")
-firebase_admin.initialize_app(cred ,
-                              {
-                                'databaseURL': 'https://savoury-hackverse-default-rtdb.firebaseio.com/',
-                              })
-ref = db.reference('/recipies/south_indian')
+def price_scrapping(URL):
+    HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
+               "Accept-Encoding": "gzip, deflate",
+               "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT": "1"
+        , "Connection": "close", "Upgrade-Insecure-Requests": "1"}
+    webpage = requests.get(URL, headers=HEADERS)
+    soup = BeautifulSoup(webpage.content, "lxml")
+    try:
+        title = soup.find("span", attrs={"class": 'a-size-medium a-color-price priceBlockBuyingPriceString'})
+        return float(title.text[2:])
+    except AttributeError:
+        return -1;
 
-ref.set({
-'breakfast':{
-    'mallige idli':{
-        'urad dal' : '128',
-        'poha' : '100',
-        'idli rice' : '200',
-        'salt' : '5.69',
-        'oil ' : '5'
-    },
-    'rava idli' : {
-        'oil' : '15',
-        'mustard' : '5.69',
-        'cumin' :'2.5',
-        'chana dal' : '6',
-        'rava': '220',
-        'curd' : '100',
-        'cashew' : '20',
-    }
-}
-})
