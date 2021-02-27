@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/gvaja/FlutterProjects/saveury/lib/pages/questionPage.dart';
+import 'package:saveury/pages/homePage.dart';
+import 'package:saveury/pages/questionPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +34,8 @@ class _myAppState extends State<myApp> {
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: Color(0xFF3A539B),
-        accentColor: Color(0xFF3A539B),
+        accentColor: Color(0xffec5451),
+
 
         // Define the default font family.
         // fontFamily: 'Robato',
@@ -47,7 +49,8 @@ class _myAppState extends State<myApp> {
         ),
       ),
       routes: {
-        'home': (context) => QuestionPage(),
+        'home': (context) => HomePage(),
+        'questionPage' : (context) => QuestionPage(),
       },
       initialRoute: 'home',
     );
