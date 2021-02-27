@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saveury/pages/homePage.dart';
+import 'package:saveury/pages/ingredientsPage.dart';
 import 'package:saveury/pages/questionPage.dart';
 
 void main() {
@@ -51,8 +52,9 @@ class _myAppState extends State<myApp> {
       routes: {
         'home': (context) => HomePage(),
         'questionPage' : (context) => QuestionPage(),
+        'ingredientsPage' : (context) => IngredientsPage()
       },
-      initialRoute: 'home',
+      initialRoute: 'ingredientsPage',
     );
   }
 }
