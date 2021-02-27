@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121298910156",
+    "firebase_url": "https://savoury-hackverse-default-rtdb.firebaseio.com",
+    "project_id": "savoury-hackverse",
+    "storage_bucket": "savoury-hackverse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121298910156:android:5970551df9b3495fa07b69",
+        "android_client_info": {
+          "package_name": "com.homies.saveury"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121298910156-gg6jbphngvjjtqdob5i8v6f7th5saaap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5nXaobB148wn-fklD_UT3vvxgDU9mOyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121298910156-gg6jbphngvjjtqdob5i8v6f7th5saaap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
