@@ -1,6 +1,5 @@
 import 'package:expansion_card/expansion_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../custom_widgets/dishButton.dart';
@@ -26,57 +25,122 @@ class _HomePageState extends State<HomePage> {
   List<Map<String,dynamic>> dishDataD;
   List<DishButton> dishesNameD;
 
-  void return
+  List<DishButton> rBreakfast =[];
+  List<DishButton> rLunch = [];
+  List<DishButton> rDinner = [];
 
-  Future<void> fetchData ()async{
+  Future<void> fetchRecommended(String typeFood, String timeFood) async {
+    String foodUrl = "https://savoury-hackverse-default-rtdb.firebaseio.com/recomended/$typeFood/$timeFood/recomended_dish.json";
+    var foodData = await http.get(foodUrl);
+    setState(() {
+      isLoading = true;
+    });
+    print(typeFood+" "+ timeFood+"->"+foodData.body);
+
+    int counterB = 0,counterL=0,counterD=0;
+    if(timeFood == "breakfast"){
+      var data = DishButton(index: counterB,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      counterB++;
+      setState(() {
+        rBreakfast.add(data);
+      });
+
+    }else if(timeFood == "lunch"){
+      var data = DishButton(index: counterL,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      counterL++;
+      setState(() {
+        rLunch.add(data);
+      });
+    }else{
+      var data = DishButton(index: counterD,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      counterD++;
+      setState(() {
+        rDinner.add(data);
+      });
+    }
+
+  }
+  Map<String,dynamic> userInfo;
+  Future<Map<String,dynamic>> getUserPreference()
+  async{
     final userId = FirebaseAuth.instance.currentUser.uid;
     String userUrl = "https://savoury-hackverse-default-rtdb.firebaseio.com/userData/$userId.json";
     var userData = await http.get(userUrl);
     Map<String,dynamic> userMap = json.decode(userData.body) as Map<String,dynamic>;
     List userValues = userMap.values.toList();
-    print(userData.body);
-    List<Map<String,dynamic>> dishes =[];
-    List<DishButton> dishName = [];
-    List<Map<String,dynamic>> dishesL =[];
-    List<DishButton> dishNameL = [];
-    List<Map<String,dynamic>> dishesD =[];
-    List<DishButton> dishNameD = [];
-    const breakfast_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/breakfast.json";
-    const lunch_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/lunch.json";
-    const dinner_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/dinner.json";
-
-    var res = await http.get(breakfast_southIndian);
-    final extractedData = json.decode(res.body) as Map<String,dynamic>;
-    int count = 0;
-    extractedData.forEach((key, value) { dishes.add(value);dishName.add(DishButton(dishName: key,dishInfo: dishes,index: count,type:0));count++;});
-
-    res = await http.get(lunch_southIndian);
-    final extractedDataLunch = json.decode(res.body) as Map<String,dynamic>;
-    count=0;
-    extractedDataLunch.forEach((key, value) {dishesL.add(value);dishNameL.add(DishButton(dishName: key,dishInfo: dishesL,index:count,type:1));count++; });
-
-    res = await http.get(dinner_southIndian);
-    setState(() {
-      isLoading = true;
-    });
-    count=0;
-
-
-    final extractedDataDinner = json.decode(res.body) as Map<String,dynamic>;
-    extractedDataDinner.forEach((key, value) {dishesD.add(value);dishNameD.add(DishButton(dishName: key,dishInfo: dishesD,index: count,type:2));count++;});
-    dishData = dishes;
-    dishesName = dishName;
-    dishDataL = dishesL;
-    dishesNameL = dishNameL;
-    dishDataD = dishesD;
-    dishesNameD = dishNameD;
+    userInfo = userValues[0] as Map<String,dynamic>;
+    return userValues[0] as Map<String,dynamic>;
   }
+
+  // Future<void> fetchData ()async{
+  //   List<Map<String,dynamic>> dishes =[];
+  //   List<DishButton> dishName = [];
+  //   List<Map<String,dynamic>> dishesL =[];
+  //   List<DishButton> dishNameL = [];
+  //   List<Map<String,dynamic>> dishesD =[];
+  //   List<DishButton> dishNameD = [];
+  //
+  //   const breakfast_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/breakfast.json";
+  //   const lunch_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/lunch.json";
+  //   const dinner_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/dinner.json";
+  //
+  //
+  //
+  //   var res = await http.get(breakfast_southIndian);
+  //   final extractedData = json.decode(res.body) as Map<String,dynamic>;
+  //   int count = 0;
+  //   extractedData.forEach((key, value) { dishes.add(value);dishName.add(DishButton(dishName: key,dishInfo: dishes,index: count,type:0));count++;});
+  //
+  //   res = await http.get(lunch_southIndian);
+  //   final extractedDataLunch = json.decode(res.body) as Map<String,dynamic>;
+  //   count=0;
+  //   extractedDataLunch.forEach((key, value) {dishesL.add(value);dishNameL.add(DishButton(dishName: key,dishInfo: dishesL,index:count,type:1));count++; });
+  //
+  //   res = await http.get(dinner_southIndian);
+  //   count=0;
+  //
+  //
+  //   final extractedDataDinner = json.decode(res.body) as Map<String,dynamic>;
+  //   extractedDataDinner.forEach((key, value) {dishesD.add(value);dishNameD.add(DishButton(dishName: key,dishInfo: dishesD,index: count,type:2));count++;});
+  //   dishData = dishes;
+  //   dishesName = dishName;
+  //   dishDataL = dishesL;
+  //   dishesNameL = dishNameL;
+  //   dishDataD = dishesD;
+  //   dishesNameD = dishNameD;
+  // }
   @override
   void initState() {
     // TODO: implement initState
-    fetchData().then((value) {
-      isLoading = false;
-    });
+
+      getUserPreference().then((value) {
+        if(value['isNorth'])
+          {
+            fetchRecommended("north_indian", "breakfast").then((value) {
+              isLoading = false;
+            });
+          fetchRecommended("north_indian", "lunch").then((value) {
+            isLoading = false;
+          });
+          fetchRecommended("north_indian", "dinner").then((value) {
+            isLoading = false;
+          });
+          }
+
+        if(value['isSouth'])
+          {
+            fetchRecommended("south_indian", "breakfast").then((value) {
+              isLoading = false;
+            });
+            fetchRecommended("south_indian", "lunch").then((value) {
+              isLoading = false;
+            });
+            fetchRecommended("south_indian", "dinner").then((value) {
+              isLoading = false;
+            });
+          }
+
+      });
     super.initState();
   }
   @override
@@ -161,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 borderRadius: 8,
                 background: Container(
-                  height: 380,
+                  height: 200,
                   width: MediaQuery.of(context).size.width,
 
                   decoration: BoxDecoration(
@@ -194,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Container(
                     child: Column(
-                      children: dishesName,
+                      children: rBreakfast,
                     )
                   )
                 ],
@@ -210,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   borderRadius: 8,
                   background: Container(
-                    height: 275,
+                    height: 200,
                     width: MediaQuery.of(context).size.width,
 
                     decoration: BoxDecoration(
@@ -240,9 +304,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  children: <Widget>[
-                    ...dishesNameL
-                  ],
+                  children: rLunch,
                 ),
 
                 /*Dinner*/
@@ -255,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   borderRadius: 8,
                   background: Container(
-                    height: 275,
+                    height: 200,
                     width: MediaQuery.of(context).size.width,
 
                     decoration: BoxDecoration(
@@ -285,7 +347,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  children: dishesNameD,
+                  children: rDinner,
                 ),
 
 

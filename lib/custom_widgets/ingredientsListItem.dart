@@ -28,7 +28,7 @@ class _InListItemState extends State<InListItem> {
               ),
               Column(children: [
 
-                Text("${widget.currentItemData}")
+                Text("${widget.currentItemData}"+"g")
               ],
               ),
 

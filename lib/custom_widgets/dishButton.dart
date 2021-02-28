@@ -4,10 +4,10 @@ import '../pages/ingredientsPage.dart';
 import 'dart:convert';
 class DishButton extends StatefulWidget {
   int index;
-  int type;
+  String time;
+  String type;
   String dishName;
-  List<Map<String,dynamic>> dishInfo;
-  DishButton({this.dishName,this.dishInfo,this.index,this.type});
+  DishButton({this.dishName,this.index,this.type,this.time});
 
   @override
   _DishButtonState createState() => _DishButtonState();
@@ -20,14 +20,9 @@ class _DishButtonState extends State<DishButton> {
       color: Colors.transparent,
       child: InkWell(
         onTap: (){
-          for(int i =0;i<widget.dishInfo.length;i++)
-            {
-              print(json.encode(widget.dishInfo[i]));
-            }
           print(widget.dishName);
-          print(widget.dishInfo.length);
           Navigator.of(context).push(MaterialPageRoute(builder: (context){
-            return IngredientsPage(displayData: widget.dishInfo,displayName:widget.dishName,index:widget.index,type:widget.type);
+            return IngredientsPage(displayName:widget.dishName,index:widget.index,type:widget.type,time:widget.time);
           }));
         },
         child: Container(
