@@ -1,6 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+import schedule
+import time
 from recipe_scarping import price_scrapping
 
 cred = credentials.Certificate("serviceAccountKey.json")
@@ -25,7 +27,7 @@ def update_prices():
             })
 
 
-def calculate_minimum_food(style,food):
+def calculate_minimum_food(style , food):
     ref = db.reference(f'/recipes/{style}/{food}/')
     breakfast_list = ref.get()
     prices = []
@@ -43,9 +45,26 @@ def calculate_minimum_food(style,food):
         'recomended_dish': min_dishes[min(prices)],
         'recomended_dish_price': round(min(prices) , 2)
     })
+    return min_dishes[min(prices)]
 
 
-calculate_minimum_food("south_indian", "breakfast")
-calculate_minimum_food("south_indian", "lunch")
-calculate_minimum_food("south_indian", "dinner")
+def job(t):
+    update_prices()
+    calculate_minimum_food("south_indian", "breakfast")
+    calculate_minimum_food("south_indian", "lunch")
+    calculate_minimum_food("south_indian", "dinner")
+    calculate_minimum_food("north_indian", "breakfast")
+    calculate_minimum_food("north_indian", "lunch")
+    calculate_minimum_food("north_indian", "dinner")
+    return
+
+
+schedule.every().day.at("01.00").do(job,'It is 01:00')
+
+while True:
+    schedule.run_pending()
+
+
+
+
 
