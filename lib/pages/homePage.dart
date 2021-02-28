@@ -2,9 +2,9 @@ import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
-
+import '../custom_widgets/dishButton.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -15,15 +15,60 @@ class _HomePageState extends State<HomePage> {
   bool toggleBreakfast = false;
   bool toggleLunch = false;
   bool toggleDinner = false;
-
+  bool isLoading = true;
   double imageScale = 1.0;
-
-
+  List<Map<String,dynamic>> dishData;
+  List<DishButton> dishesName;
+  List<Map<String,dynamic>> dishDataL;
+  List<DishButton> dishesNameL;
+  List<Map<String,dynamic>> dishDataD;
+  List<DishButton> dishesNameD;
+  Future<void> fetchData ()async{
+    List<Map<String,dynamic>> dishes =[];
+    List<DishButton> dishName = [];
+    List<Map<String,dynamic>> dishesL =[];
+    List<DishButton> dishNameL = [];
+    List<Map<String,dynamic>> dishesD =[];
+    List<DishButton> dishNameD = [];
+    const breakfast_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/breakfast.json";
+    const lunch_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/lunch.json";
+    const dinner_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/dinner.json";
+    var res = await http.get(breakfast_southIndian);
+    final extractedData = json.decode(res.body) as Map<String,dynamic>;
+    int count = 0;
+    extractedData.forEach((key, value) { dishes.add(value);dishName.add(DishButton(dishName: key,dishInfo: dishes,index: count,type:0));count++;});
+    res = await http.get(lunch_southIndian);
+    final extractedDataLunch = json.decode(res.body) as Map<String,dynamic>;
+    count=0;
+    extractedDataLunch.forEach((key, value) {dishesL.add(value);dishNameL.add(DishButton(dishName: key,dishInfo: dishesL,index:count,type:1));count++; });
+    res = await http.get(dinner_southIndian);
+    setState(() {
+      isLoading = true;
+    });
+    count=0;
+    final extractedDataDinner = json.decode(res.body) as Map<String,dynamic>;
+    extractedDataDinner.forEach((key, value) {dishesD.add(value);dishNameD.add(DishButton(dishName: key,dishInfo: dishesD,index: count,type:2));count++;});
+    dishData = dishes;
+    dishesName = dishName;
+    dishDataL = dishesL;
+    dishesNameL = dishNameL;
+    dishDataD = dishesD;
+    dishesNameD = dishNameD;
+    print(dishData.length);
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchData().then((value) {
+      isLoading = false;
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
 
-      child: Scaffold(
+      child:isLoading ? Center(child: CircularProgressIndicator(),): Scaffold(
         appBar: AppBar(
           title: Text("Saveury",
             style: TextStyle(
@@ -92,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 borderRadius: 8,
                 background: Container(
-                  height: 275,
+                  height: 380,
                   width: MediaQuery.of(context).size.width,
 
                   decoration: BoxDecoration(
@@ -125,13 +170,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Container(
                     child: Column(
-                      children: [
-                        DishButton(dishName: "Alo Paratha",),
-                        DishButton(dishName: "Masala Dosa",),
-                        DishButton(dishName: "Idly Vada",),
-
-
-                      ],
+                      children: dishesName,
                     )
                   )
                 ],
@@ -178,9 +217,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   children: <Widget>[
-                    DishButton(dishName: "Panner Masala",),
-                    DishButton(dishName: "Chapathi Palle",),
-                    DishButton(dishName: "Anna Sambar",),
+                    ...dishesNameL
                   ],
                 ),
 
@@ -224,11 +261,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  children: <Widget>[
-                    DishButton(dishName: "Chicken Fry",),
-                    DishButton(dishName: "Mutton",),
-                    DishButton(dishName: "Anna Sambar",),
-                  ],
+                  children: dishesNameD,
                 ),
 
 
@@ -245,45 +278,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class DishButton extends StatefulWidget {
 
-  String dishName;
-  DishButton({this.dishName});
-
-  @override
-  _DishButtonState createState() => _DishButtonState();
-}
-
-class _DishButtonState extends State<DishButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: (){
-          print(widget.dishName);
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 1),
-            shape: BoxShape.rectangle,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.dishName,
-              style: GoogleFonts.raleway(
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18
-                )
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

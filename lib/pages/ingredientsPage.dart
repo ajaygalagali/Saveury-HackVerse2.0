@@ -1,12 +1,16 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saveury/custom_widgets/ingredientsListItem.dart';
 import 'package:saveury/models/ingredients.dart';
-
+import 'dart:convert';
 class IngredientsPage extends StatefulWidget {
+  List<Map<String,dynamic>> displayData;
+  int index;
+  int type;
+  String displayName;
+  IngredientsPage({this.displayData,this.displayName,this.index,this.type});
   @override
   _IngredientsPageState createState() => _IngredientsPageState();
 }
@@ -14,23 +18,19 @@ class IngredientsPage extends StatefulWidget {
 class _IngredientsPageState extends State<IngredientsPage> {
 
   List<Color> iColors = [Colors.green,Colors.blueAccent,Colors.deepOrange,Colors.amber,Colors.brown];
-  List<Ingredients> ingredients = [
-    Ingredients(name: "Chana Dal",quantity: "10",unit: "g"),
-    Ingredients(name: "Poha",quantity: "100",unit: "g"),
-    Ingredients(name: "Potato",quantity: "200",unit: "g"),
-    Ingredients(name: "Toor Dal",quantity: "15", unit: "g"),
-    Ingredients(name: "Urad Dal",quantity: "100",unit: "g"),
-
-    Ingredients(name: "Chana Dal",quantity: "10",unit: "g"),
-    Ingredients(name: "Poha",quantity: "100",unit: "g"),
-    Ingredients(name: "Potato",quantity: "200",unit: "g"),
-    Ingredients(name: "Toor Dal",quantity: "15", unit: "g"),
-    Ingredients(name: "Urad Dal",quantity: "100",unit: "g")
-  ];
-
 
   @override
   Widget build(BuildContext context) {
+    List keysD = widget.displayData[widget.index].keys.toList();
+    List valuesD = widget.displayData[widget.index].values.toList();
+    String heading;
+    if(widget.type == 0)
+      {
+        heading="BREAKFAST";
+      }else if(widget.type == 1){
+      heading = "LUNCH";
+    }
+    else heading = "DINNER";
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -59,7 +59,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
                         SizedBox(height: 32,),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Masala Dosa",
+                          child: Text(widget.displayName,
                               style: GoogleFonts.raleway(
                                 textStyle: TextStyle(
                                   fontSize: 32,
@@ -72,7 +72,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("BREAK FAST",
+                          child: Text(heading,
                               style: GoogleFonts.raleway(
                                 textStyle: TextStyle(
                                   fontSize: 18,
@@ -96,17 +96,15 @@ class _IngredientsPageState extends State<IngredientsPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(75)),
                       color: Colors.white,
-
                     ),
-
                     child: Padding(
                       padding: const EdgeInsets.only(top: 32),
                       child: ListView.builder(
                         padding: EdgeInsets.all(16),
-                        itemCount: ingredients.length,
+                        itemCount: keysD.length,
                         shrinkWrap: true,
                         itemBuilder: (context,index){
-                          return InListItem(currentItem: ingredients[index],);
+                          return InListItem(currentItem: keysD[index],currentItemData : valuesD[index]);
                         },
                       ),
                     ),

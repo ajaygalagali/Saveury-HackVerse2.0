@@ -54,7 +54,7 @@ class _myAppState extends State<myApp> {
         'questionPage' : (context) => QuestionPage(),
         'ingredientsPage' : (context) => IngredientsPage()
       },
-      initialRoute: 'ingredientsPage',
+      initialRoute: 'questionPage',
     );
   }
 }
