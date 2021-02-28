@@ -42,16 +42,16 @@ class _AuthFormState extends State<AuthForm> {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(80),
+              bottomRight: Radius.circular(60),
               bottomLeft: Radius.circular(20),
               topRight: Radius.circular(20),
-              topLeft: Radius.circular(80))),
-      height: screenSize.height * 0.4,
+              topLeft: Radius.circular(60))),
+      height: screenSize.height * 0.65,
       width: screenSize.width * 0.7,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(isRegistered ? "Welcome to saveury" : "Welcome back to saveury"),
+          Text(isRegistered ? "Welcome to Saveury" : "Welcome back to Saveury",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
           isRegistered
               ? TextField(
                   decoration: InputDecoration(labelText: "Username"),

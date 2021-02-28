@@ -39,20 +39,20 @@ class _HomePageState extends State<HomePage> {
 
     int counterB = 0,counterL=0,counterD=0;
     if(timeFood == "breakfast"){
-      var data = DishButton(index: counterB,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      var data = DishButton(index: counterB,dishName: foodData.body,time:timeFood,type:typeFood);
       counterB++;
       setState(() {
         rBreakfast.add(data);
       });
 
     }else if(timeFood == "lunch"){
-      var data = DishButton(index: counterL,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      var data = DishButton(index: counterL,dishName: foodData.body,time:timeFood,type:typeFood);
       counterL++;
       setState(() {
         rLunch.add(data);
       });
     }else{
-      var data = DishButton(index: counterD,dishName: foodData.body.substring(1,foodData.body.length-1),time:timeFood,type:typeFood);
+      var data = DishButton(index: counterD,dishName: foodData.body,time:timeFood,type:typeFood);
       counterD++;
       setState(() {
         rDinner.add(data);

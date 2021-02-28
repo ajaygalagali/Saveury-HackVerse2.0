@@ -85,17 +85,33 @@ class _IngredientsPageState extends State<IngredientsPage> {
                         SizedBox(height: 32,),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("${widget.displayName.substring(1,widget.displayName.length-1)}  ₹ ${priceV.toString()}",
-                              style: GoogleFonts.raleway(
-                                textStyle: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                child: Text("${widget.displayName.substring(1,widget.displayName.length-1)} ",
+                                    style: GoogleFonts.raleway(
+                                      textStyle: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
 
+                                      ),
+                                    )
                                 ),
-                              )
+                              ),
+                              Text("₹ ${priceV.toString()} per person",
+                                  style: GoogleFonts.raleway(
+                                    textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
                           ),
                         ),
+                        SizedBox(height: 5,),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(widget.time,
