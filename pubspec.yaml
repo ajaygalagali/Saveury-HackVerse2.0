@@ -23,6 +23,10 @@ environment:
 dependencies:
   firebase_auth: ^0.20.1
   firebase_core: ^0.7.0
+  http: ^0.12.2
+  google_fonts: ^1.1.2
+  expansion_card: ^0.1.0
+
   flutter:
     sdk: flutter
 
@@ -76,3 +80,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - assets/

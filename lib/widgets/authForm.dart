@@ -27,6 +27,11 @@ class _AuthFormState extends State<AuthForm> {
           email: emailController.text, password: passwordController.text);
     }
     Scaffold.of(context).showSnackBar(SnackBar(content: Text("Done")));
+    if(!isRegistered)
+    Navigator.of(context).pushNamed("home");
+    else
+      Navigator.of(context).pushNamed("questionPage");
+
   }
 
   Widget build(BuildContext context) {

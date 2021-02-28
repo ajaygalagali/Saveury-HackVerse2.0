@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class QuestionPage extends StatefulWidget {
   @override
@@ -7,10 +10,13 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-
+  
   int sliderValue = 4;
   bool hasSouthSelected = false;
   bool hasNorthSelected = false;
+  String location = "";
+  
+  String userId = FirebaseAuth.instance.currentUser.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +88,11 @@ class _QuestionPageState extends State<QuestionPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
                         child: TextFormField(
+                          onChanged: (s){
+                            setState(() {
+                              location = s;
+                            });
+                          },
                           decoration: InputDecoration(
                             // hintText: "Enter your region of residence",
                             border: OutlineInputBorder(
@@ -157,7 +168,34 @@ class _QuestionPageState extends State<QuestionPage> {
                     ),
                 color: Colors.blue,
                 onPressed: (){
-                  print("Get Started");
+                  
+                  Map<String,dynamic> userData = {
+                    'userId' : userId,
+                    'location' : location,
+                    'isNorth' : hasNorthSelected,
+                    'isSouth' : hasSouthSelected,
+                    'familyCount' : sliderValue
+                  };
+                  
+                  http.post("https://savoury-hackverse-default-rtdb.firebaseio.com/userData/$userId.json",
+                  body: json.encode(userData)).then((value) {
+                    Navigator.of(context).pushNamed('home');
+                  }).catchError((onError){
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Something is wrong!"),
+                    ));
+                  });
+
+
+
+
+
+
+                  
+                  
+                  
+                  
+                  
                 },
 
               )

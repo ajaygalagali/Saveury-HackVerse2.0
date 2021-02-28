@@ -1,10 +1,12 @@
 import 'package:expansion_card/expansion_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../custom_widgets/dishButton.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,7 +25,16 @@ class _HomePageState extends State<HomePage> {
   List<DishButton> dishesNameL;
   List<Map<String,dynamic>> dishDataD;
   List<DishButton> dishesNameD;
+
+  void return
+
   Future<void> fetchData ()async{
+    final userId = FirebaseAuth.instance.currentUser.uid;
+    String userUrl = "https://savoury-hackverse-default-rtdb.firebaseio.com/userData/$userId.json";
+    var userData = await http.get(userUrl);
+    Map<String,dynamic> userMap = json.decode(userData.body) as Map<String,dynamic>;
+    List userValues = userMap.values.toList();
+    print(userData.body);
     List<Map<String,dynamic>> dishes =[];
     List<DishButton> dishName = [];
     List<Map<String,dynamic>> dishesL =[];
@@ -33,19 +44,24 @@ class _HomePageState extends State<HomePage> {
     const breakfast_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/breakfast.json";
     const lunch_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/lunch.json";
     const dinner_southIndian = "https://savoury-hackverse-default-rtdb.firebaseio.com/recipes/south_indian/dinner.json";
+
     var res = await http.get(breakfast_southIndian);
     final extractedData = json.decode(res.body) as Map<String,dynamic>;
     int count = 0;
     extractedData.forEach((key, value) { dishes.add(value);dishName.add(DishButton(dishName: key,dishInfo: dishes,index: count,type:0));count++;});
+
     res = await http.get(lunch_southIndian);
     final extractedDataLunch = json.decode(res.body) as Map<String,dynamic>;
     count=0;
     extractedDataLunch.forEach((key, value) {dishesL.add(value);dishNameL.add(DishButton(dishName: key,dishInfo: dishesL,index:count,type:1));count++; });
+
     res = await http.get(dinner_southIndian);
     setState(() {
       isLoading = true;
     });
     count=0;
+
+
     final extractedDataDinner = json.decode(res.body) as Map<String,dynamic>;
     extractedDataDinner.forEach((key, value) {dishesD.add(value);dishNameD.add(DishButton(dishName: key,dishInfo: dishesD,index: count,type:2));count++;});
     dishData = dishes;
@@ -54,7 +70,6 @@ class _HomePageState extends State<HomePage> {
     dishesNameL = dishNameL;
     dishDataD = dishesD;
     dishesNameD = dishNameD;
-    print(dishData.length);
   }
   @override
   void initState() {
@@ -70,6 +85,15 @@ class _HomePageState extends State<HomePage> {
 
       child:isLoading ? Center(child: CircularProgressIndicator(),): Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(icon: Icon(Icons.logout),
+            color: Theme.of(context).primaryColor,
+            onPressed: (){
+              FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamed("auth");
+            },
+            )
+          ],
           title: Text("Saveury",
             style: TextStyle(
               color: Theme.of(context).primaryColor

@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:saveury/pages/homePage.dart';
+import 'package:saveury/pages/ingredientsPage.dart';
+import 'package:saveury/pages/questionPage.dart';
 import './screens/authScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() async {
@@ -10,12 +14,33 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      theme: ThemeData(
+        // Define the default brightness and colors.
+        brightness: Brightness.light,
+        primaryColor: Color(0xFF3A539B),
+        accentColor: Color(0xffec5451),
+
+
+        // Define the default font family.
+        // fontFamily: 'Robato',
+
+        // Define the default TextTheme. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: TextTheme(
+          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
-        home: AuthScreen());
+      ),
+      routes: {
+        'home': (context) => HomePage(),
+        'questionPage' : (context) => QuestionPage(),
+        'ingredientsPage' : (context) => IngredientsPage(),
+        'auth' : (context) => AuthScreen(),
+      },
+      initialRoute: FirebaseAuth.instance.currentUser == null ? 'auth' : 'home',
+    );
   }
 }
