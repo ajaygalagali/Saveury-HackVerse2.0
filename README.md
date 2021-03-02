@@ -7,6 +7,7 @@
 
 - Impact - After the pandemic, many have become weak economically. Rising prices of essential things are an alarming situation. There is a strong need for people to save money. This app suggests better cooking ideas by *analysing the market prices of groceries everyday*. Thus saving a good amount of money.
 
+<a href="https://www.youtube.com/watch?v=YNEzbiU378U"><img src="https://img.shields.io/badge/Watch-Demo-red?style=for-the-badge&logo=youtube" alt = "WatchDemo"></a>
 
 ### Tech Stack
 - Flutter - Front-end
@@ -31,6 +32,8 @@ We used firebase authentication and took user's dish preferences. Based on their
 
 ⚒  Developed by [Nithin AG][nithin], [Prajwal Ponnana][prajwal] and [Ajay Galagali][ajay] with ❤️  for [HackVerse2.0][hackverse]
 
+Check out our project submission at [DevFolio][devfolio] :)
+
 
 
 [ajay]:https://devfolio.co/@AjayGalagali
@@ -46,3 +49,4 @@ We used firebase authentication and took user's dish preferences. Based on their
 [hackverse]:https://hackverse.nitk.ac.in
 
 [apk]:https://drive.google.com/drive/folders/10ns4N6hxppuaQr8wUVSN5CYMoSXDMWZA?usp=sharing
+[devfolio]:https://devfolio.co/submissions/saveury-e1d3
